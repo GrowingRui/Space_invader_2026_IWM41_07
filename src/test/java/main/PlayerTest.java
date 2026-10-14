@@ -1,16 +1,11 @@
 package main;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import space_invaders.sprites.Alien;
 import space_invaders.sprites.Player;
-import space_invaders.sprites.Shot;
-
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.lang.reflect.Field;
-import java.lang.reflect.Method;
-import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
