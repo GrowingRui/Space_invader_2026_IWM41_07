@@ -86,6 +86,6 @@ public class AlienTest {
     public void testACTA3_Act(){
         alien = new Alien(100,150);
         alien.act(0);
-        assertEquals(100,alien.getX());
+        assertEquals(100,alien.getX()       );
     }
 }

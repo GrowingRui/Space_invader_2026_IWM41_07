@@ -123,8 +123,16 @@ public class BoardTest {
         assertEquals("Invasion!", board.getMessage());
     }
     @Test
-    public void testUBOMB1_Update_bomb() throws Exception {
-
+    public void testUBOMB1_UpdateBombRandomGeneration() throws Exception {
+        Alien alien = board.getAliens().getFirst();
+        Alien.Bomb bomb = alien.getBomb();
+        bomb.setDestroyed(true);
+        for (int i = 0; i < 150 && !bomb.isDestroyed(); i++) {
+            invokePrivateMethod("update_bomb");
+        }
+        assertFalse(bomb.isDestroyed());
+        assertEquals(alien.getX(), bomb.getX());
+        assertTrue(bomb.getY() == alien.getY() && bomb.getX() == alien.getX());
     }
     @Test
     public void testUBOMB2_Update_bomb() throws Exception {
