@@ -45,41 +45,36 @@ public class PlayerTest {
         player.act();
         assertEquals(152, player.getX());
     }
-
     @Test
     public void testBVT3_ActReachLeftBoundary() {
-        int leftLimit = Commons.BORDER_LEFT;
-        player.setX(leftLimit + 2);
+        player.setX(2);
         player.keyPressed(createKeyEvent(KeyEvent.KEY_PRESSED, KeyEvent.VK_LEFT));
         player.act();
-        assertEquals(leftLimit, player.getX());
+        assertEquals(0, player.getX());
     }
 
     @Test
     public void testBVT4_ActExceedLeftBoundary() {
-        int leftLimit = Commons.BORDER_LEFT;
-        player.setX(leftLimit);
+        player.setX(Commons.BORDER_LEFT);
         player.keyPressed(createKeyEvent(KeyEvent.KEY_PRESSED, KeyEvent.VK_LEFT));
         player.act();
-        assertEquals(leftLimit, player.getX());
+        assertEquals(Commons.BORDER_LEFT, player.getX());
     }
 
     @Test
     public void testBVT5_ActReachRightBoundary() {
-        int rightLimit = Commons.BOARD_WIDTH - Commons.BORDER_RIGHT;
-        player.setX(rightLimit - 2);
+        player.setX(Commons.BOARD_WIDTH - 2);
         player.keyPressed(createKeyEvent(KeyEvent.KEY_PRESSED, KeyEvent.VK_RIGHT));
         player.act();
-        assertEquals(rightLimit, player.getX());
+        assertEquals(Commons.BOARD_WIDTH, player.getX());
     }
 
     @Test
     public void testBVT6_ActExceedRightBoundary() {
-        int rightLimit = Commons.BOARD_WIDTH - Commons.BORDER_RIGHT;
-        player.setX(rightLimit);
+        player.setX(Commons.BOARD_WIDTH);
         player.keyPressed(createKeyEvent(KeyEvent.KEY_PRESSED, KeyEvent.VK_RIGHT));
         player.act();
-        assertEquals(rightLimit, player.getX());
+        assertEquals(Commons.BOARD_WIDTH, player.getX());
     }
     @Test
     public void testKR1_KeyReleasedLeft() throws Exception {

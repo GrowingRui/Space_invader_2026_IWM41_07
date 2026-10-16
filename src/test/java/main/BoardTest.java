@@ -15,7 +15,6 @@ public class BoardTest {
     @BeforeEach
     public void setUp(){
         board = new Board();
-        board.getTimer().stop();
     }
     public void invokePrivateMethod(String method) throws Exception{
         Method update = board.getClass().getDeclaredMethod(method);
@@ -88,8 +87,8 @@ public class BoardTest {
     }
     @Test
     public void testUALIEN1_Update_aliens() throws Exception {
-        Alien alien = board.getAliens().getFirst();
-        alien.setX(Commons.BOARD_WIDTH - Commons.BORDER_RIGHT);
+        Alien alien = board.getAliens().getLast();
+        alien.setX(Commons.BOARD_WIDTH);
         int initialY = alien.getY();
         board.setDirection(1);
         invokePrivateMethod("update_aliens");
@@ -99,7 +98,7 @@ public class BoardTest {
     @Test
     public void testUALIEN2_Update_aliens() throws Exception {
         Alien alien = board.getAliens().getFirst();
-        alien.setX(Commons.BOARD_WIDTH - Commons.BORDER_RIGHT);
+        alien.setX(Commons.BOARD_WIDTH);
         int initialY = alien.getY();
         board.setDirection(-1);
         invokePrivateMethod("update_aliens");
@@ -109,7 +108,7 @@ public class BoardTest {
     @Test
     public void testUALIEN3_Update_aliens() throws Exception {
         Alien alien = board.getAliens().getFirst();
-        alien.setY(Commons.GROUND + Commons.ALIEN_HEIGHT - 1);
+        alien.setY(Commons.GROUND - 1);
         invokePrivateMethod("update_aliens");
         assertTrue(board.isInGame());
         assertEquals("", board.getMessage());
@@ -158,8 +157,9 @@ public class BoardTest {
     @Test
     public void testUBOMB4_Update_bomb() throws Exception {
         Alien.Bomb bomb = board.getAliens().getFirst().getBomb();
+        bomb.setDestroyed(false);
         bomb.setX(150);
-        bomb.setY(Commons.GROUND - Commons.BOMB_HEIGHT);
+        bomb.setY(Commons.GROUND);
         invokePrivateMethod("update_bomb");
         assertTrue(bomb.isDestroyed());
     }

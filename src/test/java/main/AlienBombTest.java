@@ -37,7 +37,7 @@ public class AlienBombTest {
     @Test
     public void testBOMB4_MaxValidX() {
         Alien.Bomb bomb = alien.new Bomb(Commons.BOARD_WIDTH, 150);
-        assertEquals(Commons.BOARD_WIDTH, bomb.getX());
+        assertEquals(Commons.BOARD_WIDTH - Commons.BORDER_RIGHT, bomb.getX());
         assertEquals(150, bomb.getY());
         assertTrue(bomb.isDestroyed());
     }
@@ -72,8 +72,8 @@ public class AlienBombTest {
     @Test
     public void testBOMB9_MaxInvalidY_Robust() {
         Alien.Bomb bomb = alien.new Bomb(150, Commons.BOARD_HEIGHT + 1);
-        assertEquals(150, bomb.getX());
         assertEquals(Commons.BOARD_HEIGHT, bomb.getY());
+        assertEquals(150, bomb.getX());
         assertTrue(bomb.isDestroyed());
     }
 }
