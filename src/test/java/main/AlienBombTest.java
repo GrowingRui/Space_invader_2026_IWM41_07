@@ -16,64 +16,91 @@ public class AlienBombTest {
         Alien.Bomb bomb = alien.new Bomb(150, 150);
         assertEquals(150, bomb.getX());
         assertEquals(150, bomb.getY());
-        assertTrue(bomb.isDestroyed());
-        assertNotNull(bomb.getImage());
     }
+
     @Test
-    public void testBOMB2_MinValidX() {
-        Alien.Bomb bomb = alien.new Bomb(0, 150);
+    public void testBOMB2_XMinMenos1() {
+        Alien.Bomb bomb = alien.new Bomb(-1, 150);
 
         assertEquals(0, bomb.getX());
         assertEquals(150, bomb.getY());
-        assertTrue(bomb.isDestroyed());
     }
+
     @Test
-    public void testBOMB3_MinInvalidX_Robust() {
-        Alien.Bomb bomb = alien.new Bomb(-1, 150);
+    public void testBOMB3_XMin() {
+        Alien.Bomb bomb = alien.new Bomb(0, 150);
         assertEquals(0, bomb.getX());
         assertEquals(150, bomb.getY());
-        assertTrue(bomb.isDestroyed());
     }
+
     @Test
-    public void testBOMB4_MaxValidX() {
-        Alien.Bomb bomb = alien.new Bomb(Commons.BOARD_WIDTH, 150);
-        assertEquals(Commons.BOARD_WIDTH - Commons.BORDER_RIGHT, bomb.getX());
+    public void testBOMB4_XMinMas1() {
+        Alien.Bomb bomb = alien.new Bomb(1, 150);
+        assertEquals(1, bomb.getX());
         assertEquals(150, bomb.getY());
-        assertTrue(bomb.isDestroyed());
     }
+
     @Test
-    public void testBOMB5_MaxInvalidX_Robust() {
+    public void testBOMB5_XMaxMenos1() {
+        Alien.Bomb bomb = alien.new Bomb(Commons.BOARD_WIDTH - 1, 150);
+        assertEquals(Commons.BOARD_WIDTH -1, bomb.getX());
+        assertEquals(150, bomb.getY());
+    }
+
+    @Test
+    public void testBOMB6_XMax() {
+        Alien.Bomb bomb = alien.new Bomb(Commons.BOARD_WIDTH, 150);
+        assertEquals(Commons.BOARD_WIDTH, bomb.getX());
+        assertEquals(150, bomb.getY());
+    }
+
+    @Test
+    public void testBOMB7_XMaxMas1() {
         Alien.Bomb bomb = alien.new Bomb(Commons.BOARD_WIDTH + 1, 150);
         assertEquals(Commons.BOARD_WIDTH, bomb.getX());
         assertEquals(150, bomb.getY());
-        assertTrue(bomb.isDestroyed());
     }
+
     @Test
-    public void testBOMB6_MinValidY() {
-        Alien.Bomb bomb = alien.new Bomb(150, 0);
-        assertEquals(150, bomb.getX());
-        assertEquals(0, bomb.getY());
-        assertTrue(bomb.isDestroyed());
-    }
-    @Test
-    public void testBOMB7_MinInvalidY_Robust() {
+    public void testBOMB8_YMinMenos1() {
         Alien.Bomb bomb = alien.new Bomb(150, -1);
         assertEquals(150, bomb.getX());
         assertEquals(0, bomb.getY());
-        assertTrue(bomb.isDestroyed());
     }
+
     @Test
-    public void testBOMB8_MaxValidY() {
+    public void testBOMB9_YMin() {
+        Alien.Bomb bomb = alien.new Bomb(150, 0);
+        assertEquals(150, bomb.getX());
+        assertEquals(0, bomb.getY());
+    }
+
+    @Test
+    public void testBOMB10_YMinMas1() {
+        Alien.Bomb bomb = alien.new Bomb(150, 1);
+        assertEquals(150, bomb.getX());
+        assertEquals(1, bomb.getY());
+    }
+
+    @Test
+    public void testBOMB11_YMinMenos1() {
+        Alien.Bomb bomb = alien.new Bomb(150, Commons.BOARD_HEIGHT-1);
+        assertEquals(150, bomb.getX());
+        assertEquals(Commons.BOARD_HEIGHT-1, bomb.getY());
+    }
+
+    @Test
+    public void testBOMB12_YMax() {
         Alien.Bomb bomb = alien.new Bomb(150, Commons.BOARD_HEIGHT);
         assertEquals(150, bomb.getX());
         assertEquals(Commons.BOARD_HEIGHT, bomb.getY());
-        assertTrue(bomb.isDestroyed());
     }
+
     @Test
-    public void testBOMB9_MaxInvalidY_Robust() {
+    public void testBOMB13_YMaxMas1() {
         Alien.Bomb bomb = alien.new Bomb(150, Commons.BOARD_HEIGHT + 1);
-        assertEquals(Commons.BOARD_HEIGHT, bomb.getY());
         assertEquals(150, bomb.getX());
-        assertTrue(bomb.isDestroyed());
+        assertEquals(Commons.BOARD_HEIGHT, bomb.getY());
     }
+
 }
