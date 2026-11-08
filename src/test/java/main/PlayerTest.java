@@ -39,8 +39,8 @@ public class PlayerTest {
     @Test
     public void testInitPlayer(){
         assertNotNull(player);
-        assertEquals(player.getX(), Commons.BOARD_WIDTH / 2);
-        assertEquals(player.getY(), Commons.GROUND - 10);
+        assertEquals(Commons.BOARD_WIDTH / 2, player.getX());
+        assertEquals(Commons.GROUND - 10, player.getY());
     }
 
     @Test
@@ -60,31 +60,39 @@ public class PlayerTest {
     }
 
     @Test
-    public void testBVT3_ActReachLeftBoundary() throws Exception {
-        player.setX(2);
+    public void testBVT3_ActNotMove() throws Exception {
+        player.setX(150);
+        setPlayerDx(0);
+        player.act();
+        assertEquals(150, player.getX());
+    }
+
+    @Test
+    public void testBVT4_ActReachLeftBoundary() throws Exception {
+        player.setX(0);
         setPlayerDx(-2);
         player.act();
         assertEquals(0, player.getX());
     }
 
     @Test
-    public void testBVT4_ActExceedLeftBoundary() throws Exception {
-        player.setX(Commons.BORDER_LEFT);
+    public void testBVT5_ActNearLeftBoundary() throws Exception {
+        player.setX(1);
         setPlayerDx(-2);
         player.act();
-        assertEquals(Commons.BORDER_LEFT, player.getX());
+        assertEquals(0, player.getX());
     }
 
     @Test
-    public void testBVT5_ActReachRightBoundary() throws Exception {
-        player.setX(Commons.BOARD_WIDTH - 2);
+    public void testBVT6_ActNearRightBoundary() throws Exception {
+        player.setX(357);
         setPlayerDx(2);
         player.act();
         assertEquals(Commons.BOARD_WIDTH, player.getX());
     }
 
     @Test
-    public void testBVT6_ActExceedRightBoundary() throws Exception {
+    public void testBVT7_ActReachRightBoundary() throws Exception {
         player.setX(Commons.BOARD_WIDTH);
         setPlayerDx(2);
         player.act();
@@ -93,22 +101,44 @@ public class PlayerTest {
 
     @Test
     public void testKR1_KeyReleasedLeft() throws Exception {
-        player.keyPressed(createKeyEvent(KeyEvent.KEY_PRESSED, KeyEvent.VK_LEFT));
+        setPlayerDx(-2);
         player.keyReleased(createKeyEvent(KeyEvent.KEY_RELEASED, KeyEvent.VK_LEFT));
         assertEquals(0, getPlayerDx());
     }
 
     @Test
     public void testKR2_KeyReleasedRight() throws Exception {
-        player.keyPressed(createKeyEvent(KeyEvent.KEY_PRESSED, KeyEvent.VK_RIGHT));
+        setPlayerDx(2);
         player.keyReleased(createKeyEvent(KeyEvent.KEY_RELEASED, KeyEvent.VK_RIGHT));
         assertEquals(0, getPlayerDx());
     }
 
     @Test
     public void testKR3_KeyReleasedOtherKey() throws Exception {
-        player.keyPressed(createKeyEvent(KeyEvent.KEY_PRESSED, KeyEvent.VK_LEFT));
+        setPlayerDx(2);
         player.keyReleased(createKeyEvent(KeyEvent.KEY_RELEASED, KeyEvent.VK_SPACE));
+        assertEquals(2, getPlayerDx());
+    }
+
+    @Test
+    public void testKP1_KeyPressedLeft() throws Exception {
+        setPlayerDx(0);
+        player.keyPressed(createKeyEvent(KeyEvent.KEY_PRESSED, KeyEvent.VK_LEFT));
         assertEquals(-2, getPlayerDx());
     }
+
+    @Test
+    public void testKP2_KeyPressedRight() throws Exception {
+        setPlayerDx(0);
+        player.keyPressed(createKeyEvent(KeyEvent.KEY_PRESSED, KeyEvent.VK_RIGHT));
+        assertEquals(2, getPlayerDx());
+    }
+
+    @Test
+    public void testKP3_KeyPressedOtherKey() throws Exception {
+        setPlayerDx(0);
+        player.keyPressed(createKeyEvent(KeyEvent.KEY_PRESSED, KeyEvent.VK_SPACE));
+        assertEquals(0, getPlayerDx());
+    }
+
 }
