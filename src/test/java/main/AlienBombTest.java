@@ -1,16 +1,21 @@
 package main;
 
-import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import space_invaders.sprites.Alien;
+import main.Commons;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 
 public class AlienBombTest {
+
     private Alien alien;
+
     @BeforeEach
     public void setUp() {
         alien = new Alien(0, 0);
     }
+
     @Test
     public void testBOMB1_Nominal() {
         Alien.Bomb bomb = alien.new Bomb(150, 150);
@@ -21,7 +26,6 @@ public class AlienBombTest {
     @Test
     public void testBOMB2_XMinMenos1() {
         Alien.Bomb bomb = alien.new Bomb(-1, 150);
-
         assertEquals(0, bomb.getX());
         assertEquals(150, bomb.getY());
     }
@@ -43,7 +47,7 @@ public class AlienBombTest {
     @Test
     public void testBOMB5_XMaxMenos1() {
         Alien.Bomb bomb = alien.new Bomb(Commons.BOARD_WIDTH - 1, 150);
-        assertEquals(Commons.BOARD_WIDTH -1, bomb.getX());
+        assertEquals(Commons.BOARD_WIDTH - 1, bomb.getX());
         assertEquals(150, bomb.getY());
     }
 
@@ -83,10 +87,10 @@ public class AlienBombTest {
     }
 
     @Test
-    public void testBOMB11_YMinMenos1() {
-        Alien.Bomb bomb = alien.new Bomb(150, Commons.BOARD_HEIGHT-1);
+    public void testBOMB11_YMaxMenos1() {
+        Alien.Bomb bomb = alien.new Bomb(150, Commons.BOARD_HEIGHT - 1);
         assertEquals(150, bomb.getX());
-        assertEquals(Commons.BOARD_HEIGHT-1, bomb.getY());
+        assertEquals(Commons.BOARD_HEIGHT - 1, bomb.getY());
     }
 
     @Test
@@ -102,5 +106,4 @@ public class AlienBombTest {
         assertEquals(150, bomb.getX());
         assertEquals(Commons.BOARD_HEIGHT, bomb.getY());
     }
-
 }
