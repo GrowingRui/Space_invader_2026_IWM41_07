@@ -3,72 +3,63 @@ package main;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import space_invaders.sprites.Player;
-import javax.swing.*;
-import java.awt.*;
+import main.Commons;
+import javax.swing.JPanel;
+import java.awt.Component;
 import java.awt.event.KeyEvent;
 import java.lang.reflect.Field;
-
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class PlayerTest {
+
     private Player player;
-    private Component dummyComponent;
 
     @BeforeEach
-    public void setUp(){
+    public void setUp() {
         player = new Player();
-        dummyComponent = new JPanel();
+    }
+
+    private int getPlayerDx() {
+        try {
+            Field field = player.getClass().getSuperclass().getDeclaredField("dx");
+            field.setAccessible(true);
+            return field.getInt(player);
+        } catch (Exception e) {
+            throw new RuntimeException("Error al acceder mediante reflexión al campo dx", e);
+        }
+    }
+
+    private void setPlayerDx(int dx) {
+        try {
+            Field field = player.getClass().getSuperclass().getDeclaredField("dx");
+            field.setAccessible(true);
+            field.setInt(player, dx);
+        } catch (Exception e) {
+            throw new RuntimeException("Error al modificar mediante reflexión el campo dx", e);
+        }
     }
 
     private KeyEvent createKeyEvent(int id, int keyCode) {
-        return new KeyEvent(dummyComponent, id, System.currentTimeMillis(), 0, keyCode, KeyEvent.CHAR_UNDEFINED);
+        Component component = new JPanel();
+        return new KeyEvent(component, id, System.currentTimeMillis(), 0, keyCode, KeyEvent.CHAR_UNDEFINED);
     }
 
-    private void setPlayerDx(int dx) throws Exception {
-        Field dxField = player.getClass().getSuperclass().getDeclaredField("dx");
-        dxField.setAccessible(true);
-        dxField.set(player, dx);
-    }
 
-    private int getPlayerDx() throws Exception {
-        Field dxField = player.getClass().getSuperclass().getDeclaredField("dx");
-        dxField.setAccessible(true);
-        return (int) dxField.get(player);
-    }
+
+    // Casos de Prueba: initPlayer()
 
     @Test
-    public void testInitPlayer(){
-        assertNotNull(player);
+    public void testINIT1_PosicionInicial() {
         assertEquals(Commons.BOARD_WIDTH / 2, player.getX());
         assertEquals(Commons.GROUND - 10, player.getY());
     }
 
-    @Test
-    public void testBVT1_ActMoveLeftNominal() throws Exception {
-        player.setX(150);
-        setPlayerDx(-2);
-        player.act();
-        assertEquals(148, player.getX());
-    }
+
+
+    // Casos de Prueba: act()
 
     @Test
-    public void testBVT2_ActMoveRightNominal() throws Exception {
-        player.setX(150);
-        setPlayerDx(2);
-        player.act();
-        assertEquals(152, player.getX());
-    }
-
-    @Test
-    public void testBVT3_ActNotMove() throws Exception {
-        player.setX(150);
-        setPlayerDx(0);
-        player.act();
-        assertEquals(150, player.getX());
-    }
-
-    @Test
-    public void testBVT4_ActReachLeftBoundary() throws Exception {
+    public void testBVT1_XMinimoDxNegativo() {
         player.setX(0);
         setPlayerDx(-2);
         player.act();
@@ -76,7 +67,7 @@ public class PlayerTest {
     }
 
     @Test
-    public void testBVT5_ActNearLeftBoundary() throws Exception {
+    public void testBVT2_XIntermedioIzquierdaDxNegativo() {
         player.setX(1);
         setPlayerDx(-2);
         player.act();
@@ -84,7 +75,15 @@ public class PlayerTest {
     }
 
     @Test
-    public void testBVT6_ActNearRightBoundary() throws Exception {
+    public void testBVT3_XCentroDxNegativo() {
+        player.setX(179);
+        setPlayerDx(-2);
+        player.act();
+        assertEquals(177, player.getX());
+    }
+
+    @Test
+    public void testBVT4_XIntermedioDerechaDxPositivo() {
         player.setX(357);
         setPlayerDx(2);
         player.act();
@@ -92,53 +91,68 @@ public class PlayerTest {
     }
 
     @Test
-    public void testBVT7_ActReachRightBoundary() throws Exception {
+    public void testBVT5_XMaximoDxPositivo() {
         player.setX(Commons.BOARD_WIDTH);
         setPlayerDx(2);
         player.act();
         assertEquals(Commons.BOARD_WIDTH, player.getX());
     }
 
-    @Test
-    public void testKR1_KeyReleasedLeft() throws Exception {
-        setPlayerDx(-2);
-        player.keyReleased(createKeyEvent(KeyEvent.KEY_RELEASED, KeyEvent.VK_LEFT));
-        assertEquals(0, getPlayerDx());
-    }
+
+
+
+    // Casos de Prueba: keyPressed(KeyEvent e)
 
     @Test
-    public void testKR2_KeyReleasedRight() throws Exception {
-        setPlayerDx(2);
-        player.keyReleased(createKeyEvent(KeyEvent.KEY_RELEASED, KeyEvent.VK_RIGHT));
-        assertEquals(0, getPlayerDx());
-    }
-
-    @Test
-    public void testKR3_KeyReleasedOtherKey() throws Exception {
-        setPlayerDx(2);
-        player.keyReleased(createKeyEvent(KeyEvent.KEY_RELEASED, KeyEvent.VK_SPACE));
-        assertEquals(2, getPlayerDx());
-    }
-
-    @Test
-    public void testKP1_KeyPressedLeft() throws Exception {
+    public void testKP1_TeclaIzquierda() {
         setPlayerDx(0);
-        player.keyPressed(createKeyEvent(KeyEvent.KEY_PRESSED, KeyEvent.VK_LEFT));
+        KeyEvent event = createKeyEvent(KeyEvent.KEY_PRESSED, KeyEvent.VK_LEFT);
+        player.keyPressed(event);
         assertEquals(-2, getPlayerDx());
     }
 
     @Test
-    public void testKP2_KeyPressedRight() throws Exception {
+    public void testKP2_TeclaDerecha() {
         setPlayerDx(0);
-        player.keyPressed(createKeyEvent(KeyEvent.KEY_PRESSED, KeyEvent.VK_RIGHT));
+        KeyEvent event = createKeyEvent(KeyEvent.KEY_PRESSED, KeyEvent.VK_RIGHT);
+        player.keyPressed(event);
         assertEquals(2, getPlayerDx());
     }
 
     @Test
-    public void testKP3_KeyPressedOtherKey() throws Exception {
+    public void testKP3_TeclaEspacio() {
         setPlayerDx(0);
-        player.keyPressed(createKeyEvent(KeyEvent.KEY_PRESSED, KeyEvent.VK_SPACE));
+        KeyEvent event = createKeyEvent(KeyEvent.KEY_PRESSED, KeyEvent.VK_SPACE);
+        player.keyPressed(event);
         assertEquals(0, getPlayerDx());
     }
 
+
+
+
+    // Casos de Prueba: keyReleased(KeyEvent e)
+
+    @Test
+    public void testKR1_TeclaIzquierdaLiberada() {
+        setPlayerDx(-2);
+        KeyEvent event = createKeyEvent(KeyEvent.KEY_RELEASED, KeyEvent.VK_LEFT);
+        player.keyReleased(event);
+        assertEquals(0, getPlayerDx());
+    }
+
+    @Test
+    public void testKR2_TeclaDerechaLiberada() {
+        setPlayerDx(2);
+        KeyEvent event = createKeyEvent(KeyEvent.KEY_RELEASED, KeyEvent.VK_RIGHT);
+        player.keyReleased(event);
+        assertEquals(0, getPlayerDx());
+    }
+
+    @Test
+    public void testKR3_TeclaEspacioLiberada() {
+        setPlayerDx(2);
+        KeyEvent event = createKeyEvent(KeyEvent.KEY_RELEASED, KeyEvent.VK_SPACE);
+        player.keyReleased(event);
+        assertEquals(2, getPlayerDx());
+    }
 }
