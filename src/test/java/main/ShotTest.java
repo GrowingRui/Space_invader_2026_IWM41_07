@@ -18,6 +18,7 @@ public class ShotTest {
         assertEquals(280 - V_SPACE, shot.getY());
     }
 
+
     @Test
     public void testSHOT2_XMin() {
         Shot shot = new Shot(0, 280);
